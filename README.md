@@ -1,4 +1,4 @@
-# virtualku
+# Project Virtual KU
 
 A new Flutter project.
 
@@ -14,3 +14,9 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## วิธี Run Project
+- แนะนำให้ใช้ Visual Studio Code
+- [ลง Flutter SDK จากที่นี่ และทำตามขั้นตอน](https://docs.flutter.dev/get-started/install/windows/desktop?tab=download)
+- เปิด VSCode ขึ้นมา, Install Extension Dart และ Flutter
+- รีสตาร์ท VSCode, เปิด Terminal ขึ้นมา ให้ใช้ Flutter run (อย่าลืมเปลี่ยน Directory ก่อน Run)
