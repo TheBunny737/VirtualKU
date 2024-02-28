@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:virtualku/map_page.dart';
+import 'package:virtualku/location_list.dart';
 import 'package:virtualku/login_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -19,10 +19,10 @@ class HomePage extends StatelessWidget {
                 // Navigate to AR Navigation Map Page
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ARNavigationMap()),
+                  MaterialPageRoute(builder: (context) => LocationList()),
                 );
               },
-              child: Text('AR Navigation Map'),
+              child: Text('View Location'),
             ),
             SizedBox(height: 10),
             ElevatedButton(
