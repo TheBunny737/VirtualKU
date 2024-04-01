@@ -1,11 +1,7 @@
-# google_maps_app
-This repository is for education purpose so that you can learn how to implement Google Maps into your Flutter project. 
+# Project Virtual KU
 
-
-
-
-## Getting Started
-
-Check out our YouTube tutorial to learn more in detail about integrating Google Maps into your Flutter project.
-
-Here's the link: 
+## วิธี Run Project
+- แนะนำให้ใช้ Visual Studio Code
+- [ลง Flutter SDK จากที่นี่ และทำตามขั้นตอน](https://docs.flutter.dev/get-started/install/windows/desktop?tab=download)
+- เปิด VSCode ขึ้นมา, Install Extension Dart และ Flutter
+- รีสตาร์ท VSCode, เปิด Terminal ขึ้นมา ให้ใช้ Flutter run (อย่าลืมเปลี่ยน Directory ก่อน Run)
