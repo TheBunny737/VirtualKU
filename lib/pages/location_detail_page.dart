@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_map_app/pages/ar_page.dart';
 
+import 'package:google_map_app/pages/ar_page.dart';
 import 'package:google_map_app/pages/location_list_page.dart';
 import 'package:google_map_app/pages/google_map_page.dart';
-import 'package:google_map_app/pages/ar_page.dart';
 
 class LocationDetails extends StatelessWidget {
   final Location location;
