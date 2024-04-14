@@ -65,6 +65,20 @@ class LocationDetails extends StatelessWidget {
                 },
                 child: Text('Set Location'),
               ),
+              SizedBox(height: 10), // Add some spacing between the buttons
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ARPage(
+                        // Pass any required parameters to ARPage constructor
+                      ),
+                    ),
+                  );
+                },
+                child: Text('Go to AR Page'),
+              ),
             ],
           ),
         ),
