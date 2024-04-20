@@ -69,4 +69,16 @@ flutter {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'com.google.ar:core:1.33.0'
+
+    // Maps & Location
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.android.gms:play-services-maps:17.0.0'
+    implementation 'com.google.maps.android:maps-utils-ktx:1.7.0'
+
+    // ARCore
+    implementation "com.google.ar.sceneform.ux:sceneform-ux:1.15.0"
+
+    // Retrofit
+    implementation "com.squareup.retrofit2:retrofit:2.7.1"
+    implementation "com.squareup.retrofit2:converter-gson:2.7.1"
 }

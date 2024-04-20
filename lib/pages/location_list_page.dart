@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_map_app/pages/location_detail_page.dart';
 
 class LocationList extends StatefulWidget {
+  const LocationList({super.key});
+
   @override
   _LocationListState createState() => _LocationListState();
 }
 
 class _LocationListState extends State<LocationList> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List<Location> locations = [
     Location(
       name: 'อาคาร 45 ปีคณะวิทยาศาสตร์',
@@ -56,7 +58,7 @@ class _LocationListState extends State<LocationList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Locations'),
+        title: const Text('Locations'),
       ),
       body: Column(
         children: [
@@ -77,7 +79,7 @@ class _LocationListState extends State<LocationList> {
                   }
                 });
               },
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Search locations...',
                 prefixIcon: Icon(Icons.search),
               ),
@@ -110,7 +112,7 @@ class _LocationListState extends State<LocationList> {
                 );
               },
             )
-                : Center(
+                : const Center(
               child: Text('Type in the search field to find locations'),
             ),
           ),

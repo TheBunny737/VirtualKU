@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:google_map_app/pages/ar_page.dart';
@@ -27,7 +26,7 @@ class LocationDetails extends StatelessWidget {
   final Location location;
   final String name; // Add custom location name parameter
 
-  LocationDetails({
+  const LocationDetails({super.key,
     required this.location,
     required this.name,
   });
@@ -36,43 +35,43 @@ class LocationDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Location Details'),
+        title: const Text('Location Details'),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 'Location: ${location.name}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Image.asset(
                 location.imagePath,
                 width: 512,
                 height: 512,
                 fit: BoxFit.cover,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 'Landmark: ${location.landmark}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Text(
                 'Details: ${location.details}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 18,
                 ),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -85,9 +84,9 @@ class LocationDetails extends StatelessWidget {
                     ),
                   );
                 },
-                child: Text('Set Location'),
+                child: const Text('Set Location'),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -101,7 +100,7 @@ class LocationDetails extends StatelessWidget {
                     ),
                   );
                 },
-                child: Text('Go to AR Page'),
+                child: const Text('Go to AR Page'),
               ),
             ],
           ),

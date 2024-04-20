@@ -31,7 +31,7 @@ class _ARViewPageState extends State<ARViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'AR Live View',
           style: TextStyle(
             fontSize: 20.0,
@@ -52,10 +52,10 @@ class _ARViewPageState extends State<ARViewPage> {
                   alignment: Alignment.bottomCenter,
                   child: Container(
                     color: Colors.black.withOpacity(0.8),
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(
                       'Distance to Destination: ${distanceToDestination?.toStringAsFixed(2) ?? "Calculating..."} meters',
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
@@ -68,10 +68,10 @@ class _ARViewPageState extends State<ARViewPage> {
           ),
           Container(
             color: Colors.green, // Set background color to green
-            padding: EdgeInsets.symmetric(vertical: 16.0),
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
               widget.customLocationName,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold,
@@ -105,7 +105,7 @@ class _ARViewPageState extends State<ARViewPage> {
       );
       arCoreController!.addArCoreNode(marker); // Use the arCoreController instance to add the marker
     } catch (e) {
-      print('Error adding marker node: $e');
+      debugPrint('Error adding marker node: $e');
     }
   }
 
@@ -149,7 +149,7 @@ class _ARViewPageState extends State<ARViewPage> {
         _calculateDistance();
       });
     } catch (e) {
-      print('Error getting current location: $e');
+      debugPrint('Error getting current location: $e');
     }
   }
 

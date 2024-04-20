@@ -18,7 +18,7 @@ class GoogleMapPage extends StatefulWidget {
 }
 
 class _GoogleMapPageState extends State<GoogleMapPage> {
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
   LatLng? _currentPosition;
   late LatLng _destination;
   late LocationData _locationData;
@@ -80,7 +80,7 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
   // Load marker icons
   Future<void> _loadMarkerIcons() async {
     final iconData = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(48, 48)),
+      const ImageConfiguration(size: Size(48, 48)),
       'assets/images/current_marker.png', // Path to custom marker icon
     );
     setState(() {
@@ -102,31 +102,29 @@ class _GoogleMapPageState extends State<GoogleMapPage> {
         },
         markers: {
           Marker(
-            markerId: MarkerId('destination'),
+            markerId: const MarkerId('destination'),
             position: _destination,
           ),
           if (_currentPosition != null && _currentLocationIcon != null) // Add condition for icon
             Marker(
-              markerId: MarkerId('current'),
+              markerId: const MarkerId('current'),
               position: _currentPosition!,
               icon: _currentLocationIcon!, // Use custom icon
             ),
         },
         polylines: {
-          Polyline(
-            polylineId: PolylineId('route'),
-            points: [
-              _currentPosition ?? _destination,
-              _destination,
-            ],
-            color: Colors.green,
-            width: 3,
-          ),
+          if (_currentPosition != null)
+            Polyline(
+              polylineId: const PolylineId('route'),
+              points: [_currentPosition!, _destination],
+              color: Colors.green,
+              width: 3,
+            ),
         },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _moveToCurrentPosition,
-        child: Icon(Icons.my_location),
+        child: const Icon(Icons.my_location),
       ),
     );
   }
