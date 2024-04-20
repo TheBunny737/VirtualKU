@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:google_map_app/pages/ar_page.dart';
 import 'package:google_map_app/pages/location_list_page.dart';
 import 'package:google_map_app/pages/google_map_page.dart';
+import 'package:google_map_app/pages/ar_page.dart';
 
 class LocationDetails extends StatelessWidget {
   final Location location;
@@ -15,7 +15,7 @@ class LocationDetails extends StatelessWidget {
       appBar: AppBar(
         title: Text('Location Details'),
       ),
-      body: SingleChildScrollView( // Wrap the Column with SingleChildScrollView
+      body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
           child: Column(
@@ -49,7 +49,7 @@ class LocationDetails extends StatelessWidget {
                   fontSize: 18,
                 ),
               ),
-              SizedBox(height: 20), // Add spacing between the details and the button
+              SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
@@ -64,14 +64,15 @@ class LocationDetails extends StatelessWidget {
                 },
                 child: Text('Set Location'),
               ),
-              SizedBox(height: 10), // Add some spacing between the buttons
+              SizedBox(height: 10),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ARPage(
-                        // Pass any required parameters to ARPage constructor
+                      builder: (context) => ARViewPage(
+                        destinationLatitude: location.latitude,
+                        destinationLongitude: location.longitude,
                       ),
                     ),
                   );

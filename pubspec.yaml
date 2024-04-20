@@ -18,7 +18,7 @@ dependencies:
   vector_math: ^2.1.4
   flutter_map: ^6.1.0
   ar_flutter_plugin: ^0.7.3
-
+  plugin_platform_interface: ^2.1.8
 
 dev_dependencies:
   flutter_test:

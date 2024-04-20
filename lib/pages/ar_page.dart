@@ -1,14 +1,25 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
-import 'package:vector_math/vector_math_64.dart' as vector; // Import vector_math package with alias
+import 'package:vector_math/vector_math_64.dart' as vector;
 
-class ARPage extends StatefulWidget {
+class ARViewPage extends StatefulWidget {
+  final double destinationLatitude;
+  final double destinationLongitude;
+
+  const ARViewPage({
+    Key? key,
+    required this.destinationLatitude,
+    required this.destinationLongitude,
+  }) : super(key: key);
+
   @override
-  _ARPageState createState() => _ARPageState();
+  _ARViewPageState createState() => _ARViewPageState();
 }
 
-class _ARPageState extends State<ARPage> {
-  late ArCoreController arCoreController;
+class _ARViewPageState extends State<ARViewPage> {
+  ArCoreController? arCoreController;
 
   @override
   Widget build(BuildContext context) {
@@ -25,19 +36,40 @@ class _ARPageState extends State<ARPage> {
 
   void _onArCoreViewCreated(ArCoreController controller) {
     arCoreController = controller;
-    _addSphere(arCoreController);
+    _addMarker(arCoreController!);
+    // _addArrow(arCoreController!);
   }
 
-  Future<void> _addSphere(ArCoreController controller) async {
-    final material = ArCoreMaterial(color: Colors.blue, metallic: 1.0);
-    final sphere = ArCoreSphere(materials: [material], radius: 0.2);
-    final node = ArCoreNode(shape: sphere, position: vector.Vector3(0.0, 0.0, -1.0)); // Use Vector3 from vector_math with alias
-    controller.addArCoreNode(node);
+  Future<void> _addMarker(ArCoreController controller) async {
+    try {
+      final material = ArCoreMaterial(color: Colors.red, metallic: 1.0);
+      final marker = ArCoreNode(
+        shape: ArCoreSphere(materials: [material], radius: 0.05),
+        position: vector.Vector3(0.0, 0.0, -1.0),
+      );
+      controller.addArCoreNode(marker);
+    } catch (e) {
+      print('Error adding marker node: $e');
+    }
   }
+
+  // Future<void> _addArrow(ArCoreController controller) async {
+  //   try {
+  //     final arrowNode = ArCoreReferenceNode(
+  //       name: 'arrow',
+  //       objectUrl: 'assets/images/arrow.obj',
+  //       position: vector.Vector3(0.0, 0.0, -1.0),
+  //       scale: vector.Vector3(0.2, 0.2, 0.2),
+  //     );
+  //     controller.addArCoreNode(arrowNode);
+  //   } catch (e) {
+  //     print('Error adding arrow node: $e');
+  //   }
+  // }
 
   @override
   void dispose() {
-    arCoreController.dispose();
+    arCoreController?.dispose();
     super.dispose();
   }
 }
