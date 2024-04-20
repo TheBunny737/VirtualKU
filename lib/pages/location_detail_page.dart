@@ -1,13 +1,36 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:google_map_app/pages/ar_page.dart';
-import 'package:google_map_app/pages/location_list_page.dart';
+// import 'package:google_map_app/pages/location_list_page.dart';
 import 'package:google_map_app/pages/google_map_page.dart';
-import 'package:google_map_app/pages/ar_page.dart';
+
+class Location {
+  final String name;
+  final String landmark;
+  final String details;
+  final String imagePath;
+  final double latitude; // Latitude of the location
+  final double longitude; // Longitude of the location
+
+  Location({
+    required this.name,
+    required this.landmark,
+    required this.details,
+    required this.imagePath,
+    required this.latitude,
+    required this.longitude,
+  });
+}
 
 class LocationDetails extends StatelessWidget {
   final Location location;
+  final String name; // Add custom location name parameter
 
-  LocationDetails({required this.location});
+  LocationDetails({
+    required this.location,
+    required this.name,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -71,8 +94,9 @@ class LocationDetails extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ARViewPage(
-                        // destinationLatitude: location.latitude,
-                        // destinationLongitude: location.longitude,
+                        destinationLatitude: location.latitude,
+                        destinationLongitude: location.longitude,
+                        customLocationName: location.name, // Pass custom location name
                       ),
                     ),
                   );

@@ -1,19 +1,23 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
-import 'package:vector_math/vector_math_64.dart' as vector;
+import 'package:vector_math/vector_math_64.dart' as vector; // Import statement added
 import 'package:geolocator/geolocator.dart';
 
-// void main() {
-//   runApp(MyApp());
-// }
-
 class ARViewPage extends StatefulWidget {
+  final double destinationLatitude;
+  final double destinationLongitude;
+  final String customLocationName;
+
+  const ARViewPage({
+    Key? key,
+    required this.destinationLatitude,
+    required this.destinationLongitude,
+    required this.customLocationName,
+  }) : super(key: key);
+
   @override
   _ARViewPageState createState() => _ARViewPageState();
 }
-
 class _ARViewPageState extends State<ARViewPage> {
   ArCoreController? arCoreController;
   Position? currentPosition;
@@ -22,41 +26,55 @@ class _ARViewPageState extends State<ARViewPage> {
   double? distanceToDestination;
 
   @override
-  void initState() {
-    super.initState();
-    _getCurrentLocation();
-    // Example destination coordinates (Change as needed)
-    destinationLatitude = 13.849805372964815;
-    destinationLongitude = 100.56830608503942;
-  }
-
-  @override
-  void dispose() {
-    arCoreController?.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('AR Live View'),
-      ),
-      body: Stack(
-        children: [
-          ArCoreView(
-            onArCoreViewCreated: _onArCoreViewCreated,
-            enableTapRecognizer: true,
+        title: Text(
+          'AR Live View',
+          style: TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              color: Colors.black.withOpacity(0.5),
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              child: Text(
-                'Distance to Destination: ${distanceToDestination?.toStringAsFixed(2) ?? "Calculating..."} meters',
-                style: TextStyle(color: Colors.white),
+        ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Stack(
+              children: [
+                ArCoreView(
+                  onArCoreViewCreated: _onArCoreViewCreated,
+                  enableTapRecognizer: true,
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    color: Colors.black.withOpacity(0.8),
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      'ระยะทาง: ${distanceToDestination?.toStringAsFixed(2) ?? "กำลังคำนวณ.."} เมตร',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 11.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            color: Colors.green.withOpacity(0.75),
+            padding: EdgeInsets.symmetric(vertical: 16.0),
+            child: Text(
+              widget.customLocationName,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 15.0,
+                fontWeight: FontWeight.bold,
               ),
+              textAlign: TextAlign.center,
             ),
           ),
         ],
@@ -66,19 +84,36 @@ class _ARViewPageState extends State<ARViewPage> {
 
   void _onArCoreViewCreated(ArCoreController controller) {
     arCoreController = controller;
-    _addMarker(arCoreController!);
+    _getCurrentLocation();
+    _addMarker(); // Call the method to add marker
   }
 
-  void _addMarker(ArCoreController controller) {
+  void _addMarker() {
     try {
       final marker = ArCoreNode(
-        shape: ArCoreSphere(radius: 0.1, materials: [ArCoreMaterial(color: Colors.red)]),
+        shape: ArCoreSphere(
+          radius: 0.1,
+          materials: [ArCoreMaterial(color: Colors.red)],
+        ),
         position: vector.Vector3(0.0, 0.0, -5.0),
       );
-      controller.addArCoreNode(marker);
+      arCoreController!.addArCoreNode(marker); // Use the arCoreController instance to add the marker
     } catch (e) {
       print('Error adding marker node: $e');
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    destinationLatitude = widget.destinationLatitude;
+    destinationLongitude = widget.destinationLongitude;
+  }
+
+  @override
+  void dispose() {
+    arCoreController?.dispose();
+    super.dispose();
   }
 
   void _getCurrentLocation() async {
