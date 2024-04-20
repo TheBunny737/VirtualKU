@@ -71,8 +71,8 @@ class LocationDetails extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ARViewPage(
-                        destinationLatitude: location.latitude,
-                        destinationLongitude: location.longitude,
+                        // destinationLatitude: location.latitude,
+                        // destinationLongitude: location.longitude,
                       ),
                     ),
                   );

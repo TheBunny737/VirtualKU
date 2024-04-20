@@ -3,33 +3,63 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
+import 'package:geolocator/geolocator.dart';
+
+// void main() {
+//   runApp(MyApp());
+// }
 
 class ARViewPage extends StatefulWidget {
-  final double destinationLatitude;
-  final double destinationLongitude;
-
-  const ARViewPage({
-    Key? key,
-    required this.destinationLatitude,
-    required this.destinationLongitude,
-  }) : super(key: key);
-
   @override
   _ARViewPageState createState() => _ARViewPageState();
 }
 
 class _ARViewPageState extends State<ARViewPage> {
   ArCoreController? arCoreController;
+  Position? currentPosition;
+  double? destinationLatitude;
+  double? destinationLongitude;
+  double? distanceToDestination;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentLocation();
+    // Example destination coordinates (Change as needed)
+    destinationLatitude = 13.849805372964815;
+    destinationLongitude = 100.56830608503942;
+  }
+
+  @override
+  void dispose() {
+    arCoreController?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('AR View'),
+        title: Text('AR Live View'),
       ),
-      body: ArCoreView(
-        onArCoreViewCreated: _onArCoreViewCreated,
-        enableTapRecognizer: true,
+      body: Stack(
+        children: [
+          ArCoreView(
+            onArCoreViewCreated: _onArCoreViewCreated,
+            enableTapRecognizer: true,
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              color: Colors.black.withOpacity(0.5),
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(
+                'Distance to Destination: ${distanceToDestination?.toStringAsFixed(2) ?? "Calculating..."} meters',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -37,15 +67,13 @@ class _ARViewPageState extends State<ARViewPage> {
   void _onArCoreViewCreated(ArCoreController controller) {
     arCoreController = controller;
     _addMarker(arCoreController!);
-    // _addArrow(arCoreController!);
   }
 
-  Future<void> _addMarker(ArCoreController controller) async {
+  void _addMarker(ArCoreController controller) {
     try {
-      final material = ArCoreMaterial(color: Colors.red, metallic: 1.0);
       final marker = ArCoreNode(
-        shape: ArCoreSphere(materials: [material], radius: 0.05),
-        position: vector.Vector3(0.0, 0.0, -1.0),
+        shape: ArCoreSphere(radius: 0.1, materials: [ArCoreMaterial(color: Colors.red)]),
+        position: vector.Vector3(0.0, 0.0, -5.0),
       );
       controller.addArCoreNode(marker);
     } catch (e) {
@@ -53,23 +81,29 @@ class _ARViewPageState extends State<ARViewPage> {
     }
   }
 
-  // Future<void> _addArrow(ArCoreController controller) async {
-  //   try {
-  //     final arrowNode = ArCoreReferenceNode(
-  //       name: 'arrow',
-  //       objectUrl: 'assets/images/arrow.obj',
-  //       position: vector.Vector3(0.0, 0.0, -1.0),
-  //       scale: vector.Vector3(0.2, 0.2, 0.2),
-  //     );
-  //     controller.addArCoreNode(arrowNode);
-  //   } catch (e) {
-  //     print('Error adding arrow node: $e');
-  //   }
-  // }
+  void _getCurrentLocation() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      setState(() {
+        currentPosition = position;
+        _calculateDistance();
+      });
+    } catch (e) {
+      print('Error getting current location: $e');
+    }
+  }
 
-  @override
-  void dispose() {
-    arCoreController?.dispose();
-    super.dispose();
+  void _calculateDistance() {
+    if (currentPosition != null && destinationLatitude != null && destinationLongitude != null) {
+      double distance = Geolocator.distanceBetween(
+        currentPosition!.latitude,
+        currentPosition!.longitude,
+        destinationLatitude!,
+        destinationLongitude!,
+      );
+      setState(() {
+        distanceToDestination = distance;
+      });
+    }
   }
 }
