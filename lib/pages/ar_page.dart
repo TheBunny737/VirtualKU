@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
-import 'package:vector_math/vector_math_64.dart' as vector; // Import statement added
+import 'package:vector_math/vector_math_64.dart' as vector;
 import 'package:geolocator/geolocator.dart';
+import 'dart:math' as math;
 
 class ARViewPage extends StatefulWidget {
   final double destinationLatitude;
@@ -18,6 +19,7 @@ class ARViewPage extends StatefulWidget {
   @override
   _ARViewPageState createState() => _ARViewPageState();
 }
+
 class _ARViewPageState extends State<ARViewPage> {
   ArCoreController? arCoreController;
   Position? currentPosition;
@@ -52,10 +54,10 @@ class _ARViewPageState extends State<ARViewPage> {
                     color: Colors.black.withOpacity(0.8),
                     padding: EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(
-                      'ระยะทาง: ${distanceToDestination?.toStringAsFixed(2) ?? "กำลังคำนวณ.."} เมตร',
+                      'Distance to Destination: ${distanceToDestination?.toStringAsFixed(2) ?? "Calculating..."} meters',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 11.0,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -65,13 +67,13 @@ class _ARViewPageState extends State<ARViewPage> {
             ),
           ),
           Container(
-            color: Colors.green.withOpacity(0.75),
+            color: Colors.green, // Set background color to green
             padding: EdgeInsets.symmetric(vertical: 16.0),
             child: Text(
               widget.customLocationName,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 15.0,
+                fontSize: 18.0,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
@@ -90,17 +92,40 @@ class _ARViewPageState extends State<ARViewPage> {
 
   void _addMarker() {
     try {
+      // Calculate rotation angle between current location and destination
+      double rotationAngle = _calculateRotationAngle();
+
       final marker = ArCoreNode(
         shape: ArCoreSphere(
           radius: 0.1,
           materials: [ArCoreMaterial(color: Colors.red)],
         ),
         position: vector.Vector3(0.0, 0.0, -5.0),
+        rotation: vector.Vector4(0.0, math.sin(rotationAngle / 2), 0.0, math.cos(rotationAngle / 2)),
       );
       arCoreController!.addArCoreNode(marker); // Use the arCoreController instance to add the marker
     } catch (e) {
       print('Error adding marker node: $e');
     }
+  }
+
+  double _calculateRotationAngle() {
+    if (currentPosition != null && destinationLatitude != null && destinationLongitude != null) {
+      // Convert nullable doubles to non-nullable doubles
+      double lat = destinationLatitude!;
+      double lon = destinationLongitude!;
+
+      // Calculate angle between current location and destination
+      double dLon = lon - currentPosition!.longitude;
+      double y = math.sin(dLon) * math.cos(lat);
+      double x = math.cos(currentPosition!.latitude) * math.sin(lat) -
+          math.sin(currentPosition!.latitude) * math.cos(lat) * math.cos(dLon);
+      double angle = math.atan2(y, x);
+
+      // Convert angle to radians
+      return angle;
+    }
+    return 0.0;
   }
 
   @override
