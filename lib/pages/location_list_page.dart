@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_map_app/pages/location_detail_page.dart';
+import 'package:google_map_app/pages/stat_page.dart';
 
 class LocationList extends StatefulWidget {
   const LocationList({super.key});
@@ -53,12 +54,22 @@ class _LocationListState extends State<LocationList> {
     ),
   ];
   List<Location> filteredLocations = [];
+  Map<String, int> locationClickCounts = {}; // Map to store location click counts
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Locations'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.bar_chart),
+            onPressed: () {
+              _navigateToStatisticsPage(); // Navigate to statistics page
+            },
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -72,9 +83,7 @@ class _LocationListState extends State<LocationList> {
                     filteredLocations.clear();
                   } else {
                     filteredLocations = locations
-                        .where((location) => location.name
-                        .toLowerCase()
-                        .contains(value.toLowerCase()))
+                        .where((location) => location.name.toLowerCase().contains(value.toLowerCase()))
                         .toList();
                   }
                 });
@@ -99,12 +108,13 @@ class _LocationListState extends State<LocationList> {
                     fit: BoxFit.cover,
                   ),
                   onTap: () {
+                    _incrementLocationClick(filteredLocations[index].name); // Increment location click count
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => LocationDetails(
                           location: filteredLocations[index],
-                          name: filteredLocations[index].name, // Provide customLocationName
+                          name: filteredLocations[index].name,
                         ),
                       ),
                     );
@@ -120,7 +130,28 @@ class _LocationListState extends State<LocationList> {
       ),
     );
   }
+
+  void _navigateToStatisticsPage() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => StatisticsPage(locationStats: locationClickCounts),
+      ),
+    );
+  }
+
+  void _incrementLocationClick(String locationName) {
+    setState(() {
+      if (locationClickCounts.containsKey(locationName)) {
+        locationClickCounts[locationName] = locationClickCounts[locationName]! + 1;
+      } else {
+        locationClickCounts[locationName] = 1;
+      }
+    });
+  }
 }
+
+
 
 // class Location {
 //   final String name;
