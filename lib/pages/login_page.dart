@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:google_map_app/pages/home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -60,6 +59,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Login'),
+        backgroundColor: Colors.green,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -83,11 +83,19 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => _login(context),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.green), // Set button background color to green
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Set text color to black
+              ),
               child: const Text('Login'),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () => continueAsGuest(context),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.green), // Set button background color to green
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Set text color to black
+              ),
               child: const Text('Continue as Guest'),
             ),
             const SizedBox(height: 10),

@@ -62,6 +62,7 @@ class _LocationListState extends State<LocationList> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Locations'),
+        backgroundColor: Colors.green,
         actions: [
           IconButton(
             icon: const Icon(Icons.bar_chart),

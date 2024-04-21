@@ -11,6 +11,7 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
+        backgroundColor: Colors.green,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -18,6 +19,10 @@ class HomePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white70), // Set button background color to green
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.black), // Set text color to black
+              ),
               onPressed: () {
                 // Navigate to AR Navigation Map Page
                 Navigator.push(
@@ -29,6 +34,10 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(Colors.white70), // Set button background color to green
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.black), // Set text color to black
+              ),
               onPressed: () {
                 // Navigate to Login Page
                 Navigator.pushReplacement(

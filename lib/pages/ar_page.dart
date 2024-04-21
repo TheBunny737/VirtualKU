@@ -92,41 +92,41 @@ class _ARViewPageState extends State<ARViewPage> {
 
   void _addMarker() {
     try {
-      // Calculate rotation angle between current location and destination
-      double rotationAngle = _calculateRotationAngle();
+      if (currentPosition != null && destinationLatitude != null && destinationLongitude != null) {
+        // Calculate the distance and bearing between current location and destination
+        double distance = Geolocator.distanceBetween(
+          currentPosition!.latitude,
+          currentPosition!.longitude,
+          destinationLatitude!,
+          destinationLongitude!,
+        );
+        double bearing = Geolocator.bearingBetween(
+          currentPosition!.latitude,
+          currentPosition!.longitude,
+          destinationLatitude!,
+          destinationLongitude!,
+        );
 
-      final marker = ArCoreNode(
-        shape: ArCoreSphere(
-          radius: 0.1,
-          materials: [ArCoreMaterial(color: Colors.red)],
-        ),
-        position: vector.Vector3(0.0, 0.0, -5.0),
-        rotation: vector.Vector4(0.0, math.sin(rotationAngle / 2), 0.0, math.cos(rotationAngle / 2)),
-      );
-      arCoreController!.addArCoreNode(marker); // Use the arCoreController instance to add the marker
+        // Convert distance from meters to AR world units (1 unit = 1 meter)
+        double x = distance * math.cos(bearing * math.pi / 180);
+        double z = distance * math.sin(bearing * math.pi / 180);
+
+        // Add the marker at the calculated position
+        final marker = ArCoreNode(
+          shape: ArCoreSphere(
+            radius: 0.1,
+            materials: [ArCoreMaterial(color: Colors.red)],
+          ),
+          position: vector.Vector3(x, 0.0, -z), // Adjust the y position as needed
+          rotation: vector.Vector4(0.0, 0.0, 0.0, 0.0), // Adjust the rotation as needed
+        );
+        arCoreController!.addArCoreNode(marker); // Use the arCoreController instance to add the marker
+      }
     } catch (e) {
       debugPrint('Error adding marker node: $e');
     }
   }
 
-  double _calculateRotationAngle() {
-    if (currentPosition != null && destinationLatitude != null && destinationLongitude != null) {
-      // Convert nullable doubles to non-nullable doubles
-      double lat = destinationLatitude!;
-      double lon = destinationLongitude!;
-
-      // Calculate angle between current location and destination
-      double dLon = lon - currentPosition!.longitude;
-      double y = math.sin(dLon) * math.cos(lat);
-      double x = math.cos(currentPosition!.latitude) * math.sin(lat) -
-          math.sin(currentPosition!.latitude) * math.cos(lat) * math.cos(dLon);
-      double angle = math.atan2(y, x);
-
-      // Convert angle to radians
-      return angle;
-    }
-    return 0.0;
-  }
 
   @override
   void initState() {

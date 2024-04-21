@@ -36,6 +36,7 @@ class LocationDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Location Details'),
+        backgroundColor: Colors.green,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -73,6 +74,10 @@ class LocationDetails extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.green), // Set button background color to green
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Set text color to black
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -88,6 +93,10 @@ class LocationDetails extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.green), // Set button background color to green
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white), // Set text color to black
+                ),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -100,7 +109,7 @@ class LocationDetails extends StatelessWidget {
                     ),
                   );
                 },
-                child: const Text('Go to AR Page'),
+                child: const Text('Set Location AR'),
               ),
             ],
           ),
