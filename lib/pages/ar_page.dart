@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
 import 'package:vector_math/vector_math_64.dart' as vector;
 import 'package:geolocator/geolocator.dart';
-import 'dart:math' as math;
 
 class ARViewPage extends StatefulWidget {
   final double destinationLatitude;
@@ -54,7 +53,7 @@ class _ARViewPageState extends State<ARViewPage> {
                     color: Colors.black.withOpacity(0.8),
                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: Text(
-                      'Distance to Destination: ${distanceToDestination?.toStringAsFixed(2) ?? "Calculating..."} meters',
+                      'ระยะทาง: ${distanceToDestination?.toStringAsFixed(2) ?? "กำลังคำนวณ.."} เมตร',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16.0,
@@ -73,7 +72,7 @@ class _ARViewPageState extends State<ARViewPage> {
               widget.customLocationName,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 18.0,
+                fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
               textAlign: TextAlign.center,
@@ -87,46 +86,9 @@ class _ARViewPageState extends State<ARViewPage> {
   void _onArCoreViewCreated(ArCoreController controller) {
     arCoreController = controller;
     _getCurrentLocation();
-    _addMarker(); // Call the method to add marker
+    _addSphere();
+    _addCylinder(controller);
   }
-
-  void _addMarker() {
-    try {
-      if (currentPosition != null && destinationLatitude != null && destinationLongitude != null) {
-        // Calculate the distance and bearing between current location and destination
-        double distance = Geolocator.distanceBetween(
-          currentPosition!.latitude,
-          currentPosition!.longitude,
-          destinationLatitude!,
-          destinationLongitude!,
-        );
-        double bearing = Geolocator.bearingBetween(
-          currentPosition!.latitude,
-          currentPosition!.longitude,
-          destinationLatitude!,
-          destinationLongitude!,
-        );
-
-        // Convert distance from meters to AR world units (1 unit = 1 meter)
-        double x = distance * math.cos(bearing * math.pi / 180);
-        double z = distance * math.sin(bearing * math.pi / 180);
-
-        // Add the marker at the calculated position
-        final marker = ArCoreNode(
-          shape: ArCoreSphere(
-            radius: 0.1,
-            materials: [ArCoreMaterial(color: Colors.red)],
-          ),
-          position: vector.Vector3(x, 0.0, -z), // Adjust the y position as needed
-          rotation: vector.Vector4(0.0, 0.0, 0.0, 0.0), // Adjust the rotation as needed
-        );
-        arCoreController!.addArCoreNode(marker); // Use the arCoreController instance to add the marker
-      }
-    } catch (e) {
-      debugPrint('Error adding marker node: $e');
-    }
-  }
-
 
   @override
   void initState() {
@@ -151,6 +113,37 @@ class _ARViewPageState extends State<ARViewPage> {
     } catch (e) {
       debugPrint('Error getting current location: $e');
     }
+  }
+
+  void _addSphere() {
+    if (arCoreController != null) {
+      final sphere = ArCoreSphere(
+        materials: [ArCoreMaterial(color: Colors.red)],
+        radius: 0.07,
+      );
+      final node = ArCoreNode(
+        shape: sphere,
+        position: vector.Vector3(0, 0, -1), // Example position, adjust as needed
+      );
+      arCoreController!.addArCoreNode(node);
+    }
+  }
+
+  void _addCylinder(ArCoreController controller) {
+    final material = ArCoreMaterial(
+      color: Colors.green,
+      reflectance: 1.0,
+    );
+    final cylindre = ArCoreCylinder(
+      materials: [material],
+      radius: 0.5,
+      height: 0.25,
+    );
+    final node = ArCoreNode(
+      shape: cylindre,
+      position: vector.Vector3(0.0, -0.5, -2.0),
+    );
+    controller.addArCoreNode(node);
   }
 
   void _calculateDistance() {
